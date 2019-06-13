@@ -1,0 +1,1509 @@
+
+anura@DESKTOP-NSONJ5O MINGW64 ~/Downloads
+$ ssh -i "Key1.pem" ec2-user@ec2-13-232-236-149.ap-south-1.compute.amazonaws.com
+The authenticity of host 'ec2-13-232-236-149.ap-south-1.compute.amazonaws.com (13.232.236.149)' can't be established.
+ECDSA key fingerprint is SHA256:s7vOk1DYSAmvAIcvQ0FEODRDdHLiBNt0NkIJ2erVwI8.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'ec2-13-232-236-149.ap-south-1.compute.amazonaws.com,13.232.236.149' (ECDSA) to the list of known hosts.
+Last login: Wed Jun 12 04:23:07 2019 from 103.214.60.72
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-ami/2018.03-release-notes/
+3 package(s) needed for security, out of 3 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@ip-172-31-21-44 ~]$ sudo -i
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+wordpress           latest              4da64649cb6f        37 hours ago        447MB
+mysql               5.7                 a1aa4f76fab9        2 days ago          373MB
+mysql               latest              c7109f74d339        2 days ago          443MB
+httpd               latest              3bd2a941224f        7 days ago          140MB
+[root@ip-172-31-21-44 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                    PORTS                  NAMES
+f6d61939d6f9        mysql:5.7           "docker-entrypoint.s…"   23 hours ago        Up About a minute         3306/tcp, 33060/tcp    wordpress1_db_1
+ca51c7b82a2c        wordpress           "docker-entrypoint.s…"   23 hours ago        Up About a minute         0.0.0.0:8080->80/tcp   wordpress1_wordpress_1
+131a55643ad1        wordpress           "docker-entrypoint.s…"   24 hours ago        Exited (0) 23 hours ago                          sad_archimedes
+2dab02d8ff89        mysql               "docker-entrypoint.s…"   24 hours ago        Exited (0) 23 hours ago                          some-mysql
+[root@ip-172-31-21-44 ~]# docker rm -f $(docker ps -aq)
+f6d61939d6f9
+ca51c7b82a2c
+131a55643ad1
+2dab02d8ff89
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@ip-172-31-21-44 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@ip-172-31-21-44 ~]# docker run -d -p 8081:8080 --name 'tomcatcontainer1' tomcat
+Unable to find image 'tomcat:latest' locally
+latest: Pulling from library/tomcat
+6f2f362378c5: Pull complete
+494c27a8a6b8: Pull complete
+7596bb83081b: Pull complete
+372744b62d49: Pull complete
+fb72767f9beb: Pull complete
+3fe571af508a: Pull complete
+3e6725074325: Pull complete
+9ffd5dadda90: Pull complete
+44ec82f96e87: Pull complete
+3e4b7ed494e4: Pull complete
+96d1eab46b1a: Pull complete
+a124e46a241a: Pull complete
+Digest: sha256:6717dc5917faf8b755cceecbe64f006988667a963a4a7899d3698bfb3361d69c
+Status: Downloaded newer image for tomcat:latest
+505c0131ed75281181e38d88195c49d97b154ca9895bc5718e4b56e373017dff
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
+505c0131ed75        tomcat              "catalina.sh run"   2 minutes ago       Up 2 minutes        0.0.0.0:8081->8080/tcp   tomcatcontainer1
+[root@ip-172-31-21-44 ~]# docker exec -it tomcatcontainer1 /bin/bash
+root@505c0131ed75:/usr/local/tomcat# cd webapps
+root@505c0131ed75:/usr/local/tomcat/webapps# wget https://www.oracle.com/webfolder/technetwork/tutorials/obe/fmw/wls/12c/03-DeployApps/files/benefits.war
+--2019-06-13 04:27:15--  https://www.oracle.com/webfolder/technetwork/tutorials/obe/fmw/wls/12c/03-DeployApps/files/benefits.war
+Resolving www.oracle.com (www.oracle.com)... 23.9.246.36, 2600:140f:4:198::366, 2600:140f:4:19a::366
+Connecting to www.oracle.com (www.oracle.com)|23.9.246.36|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 30750 (30K) [Application/war]
+Saving to: ‘benefits.war’
+
+benefits.war                                    100%[=======================================================================================================>]  30.03K  --.-KB/s    i
+
+2019-06-13 04:27:15 (101 MB/s) - ‘benefits.war’ saved [30750/30750]
+
+root@505c0131ed75:/usr/local/tomcat/webapps# service tomcat status
+tomcat: unrecognized service
+root@505c0131ed75:/usr/local/tomcat/webapps# service tomcat start
+tomcat: unrecognized service
+root@505c0131ed75:/usr/local/tomcat/webapps# docker images
+bash: docker: command not found
+root@505c0131ed75:/usr/local/tomcat/webapps# docker ps
+bash: docker: command not found
+root@505c0131ed75:/usr/local/tomcat/webapps# exit
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+tomcat              latest              1488aaf58c73        4 hours ago         522MB
+wordpress           latest              4da64649cb6f        37 hours ago        447MB
+mysql               5.7                 a1aa4f76fab9        2 days ago          373MB
+mysql               latest              c7109f74d339        2 days ago          443MB
+httpd               latest              3bd2a941224f        7 days ago          140MB
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
+505c0131ed75        tomcat              "catalina.sh run"   13 minutes ago      Up 13 minutes       0.0.0.0:8081->8080/tcp   tomcatcontainer1
+[root@ip-172-31-21-44 ~]# docker commit tomcatcontainer1 mytomcat:1.0
+sha256:35b9f3c3217fa395b149fe962f18e58997620880a148054826a0fcf22f8c961b
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
+505c0131ed75        tomcat              "catalina.sh run"   16 minutes ago      Up 16 minutes       0.0.0.0:8081->8080/tcp   tomcatcontainer1
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+mytomcat            1.0                 35b9f3c3217f        10 seconds ago      522MB
+tomcat              latest              1488aaf58c73        4 hours ago         522MB
+wordpress           latest              4da64649cb6f        37 hours ago        447MB
+mysql               5.7                 a1aa4f76fab9        2 days ago          373MB
+mysql               latest              c7109f74d339        2 days ago          443MB
+httpd               latest              3bd2a941224f        7 days ago          140MB
+[root@ip-172-31-21-44 ~]# top
+top - 04:44:02 up 24 min,  1 user,  load average: 0.08, 0.04, 0.01
+Tasks:  82 total,   1 running,  57 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.0%us,  0.0%sy,  0.0%ni,100.0%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+Mem:   1009420k total,   906608k used,   102812k free,    31368k buffers
+Swap:        0k total,        0k used,        0k free,   655844k cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND
+ 2629 root      20   0  562m  83m  44m S  0.3  8.4   0:08.34 dockerd
+    1 root      20   0 19692 2604 2280 S  0.0  0.3   0:01.20 init
+    2 root      20   0     0    0    0 S  0.0  0.0   0:00.00 kthreadd
+    4 root       0 -20     0    0    0 I  0.0  0.0   0:00.00 kworker/0:0H
+    5 root      20   0     0    0    0 I  0.0  0.0   0:00.17 kworker/u30:0
+    6 root       0 -20     0    0    0 I  0.0  0.0   0:00.00 mm_percpu_wq
+    7 root      20   0     0    0    0 S  0.0  0.0   0:00.06 ksoftirqd/0
+    8 root      20   0     0    0    0 I  0.0  0.0   0:00.04 rcu_sched
+    9 root      20   0     0    0    0 I  0.0  0.0   0:00.00 rcu_bh
+   10 root      RT   0     0    0    0 S  0.0  0.0   0:00.00 migration/0
+   11 root      RT   0     0    0    0 S  0.0  0.0   0:00.00 watchdog/0
+   12 root      20   0     0    0    0 S  0.0  0.0   0:00.00 cpuhp/0
+   13 root      20   0     0    0    0 S  0.0  0.0   0:00.00 kdevtmpfs
+   14 root       0 -20     0    0    0 I  0.0  0.0   0:00.00 netns
+   15 root      20   0     0    0    0 I  0.0  0.0   0:00.01 kworker/u30:1
+   20 root      20   0     0    0    0 S  0.0  0.0   0:00.00 xenbus
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+mytomcat            1.0                 35b9f3c3217f        4 minutes ago       522MB
+tomcat              latest              1488aaf58c73        4 hours ago         522MB
+wordpress           latest              4da64649cb6f        38 hours ago        447MB
+mysql               5.7                 a1aa4f76fab9        2 days ago          373MB
+mysql               latest              c7109f74d339        2 days ago          443MB
+httpd               latest              3bd2a941224f        7 days ago          140MB
+[root@ip-172-31-21-44 ~]# docker tag mytomcat:1.0 anuragsharma7212/mytomcatrepo:1.0
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY                      TAG                 IMAGE ID            CREATED             SIZE
+anuragsharma7212/mytomcatrepo   1.0                 35b9f3c3217f        6 minutes ago       522MB
+mytomcat                        1.0                 35b9f3c3217f        6 minutes ago       522MB
+tomcat                          latest              1488aaf58c73        4 hours ago         522MB
+wordpress                       latest              4da64649cb6f        38 hours ago        447MB
+mysql                           5.7                 a1aa4f76fab9        2 days ago          373MB
+mysql                           latest              c7109f74d339        2 days ago          443MB
+httpd                           latest              3bd2a941224f        7 days ago          140MB
+[root@ip-172-31-21-44 ~]# docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: anuragsharma7212
+Password:
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[root@ip-172-31-21-44 ~]# docker push anuragsharma7212/mytomcatrepo:1.0
+The push refers to repository [docker.io/anuragsharma7212/mytomcatrepo]
+2977631c9963: Pushed
+c9d51a878270: Mounted from library/tomcat
+10bacd8d8539: Mounted from library/tomcat
+694630803427: Mounted from library/tomcat
+25f4ff8a1284: Mounted from library/tomcat
+fa3b6a1ea5c4: Mounted from library/tomcat
+51566e3f832b: Mounted from library/tomcat
+51774d97c868: Mounted from library/tomcat
+ea20c4bf3aae: Mounted from library/tomcat
+2c8d31157b81: Mounted from library/tomcat
+7b76d801397d: Mounted from library/tomcat
+f32868cde90b: Mounted from library/tomcat
+0db06dff9d9a: Mounted from library/tomcat
+1.0: digest: sha256:451f6643fc45d19ff1b4f1765385193790964925a31c308ac405c4ce8c123164 size: 3051
+[root@ip-172-31-21-44 ~]# docker rm -f $(docker ps -aq)
+505c0131ed75
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY                      TAG                 IMAGE ID            CREATED             SIZE
+anuragsharma7212/mytomcatrepo   1.0                 35b9f3c3217f        15 minutes ago      522MB
+mytomcat                        1.0                 35b9f3c3217f        15 minutes ago      522MB
+tomcat                          latest              1488aaf58c73        5 hours ago         522MB
+wordpress                       latest              4da64649cb6f        38 hours ago        447MB
+mysql                           5.7                 a1aa4f76fab9        2 days ago          373MB
+mysql                           latest              c7109f74d339        2 days ago          443MB
+httpd                           latest              3bd2a941224f        7 days ago          140MB
+[root@ip-172-31-21-44 ~]# docker rmi -f $(docker images)
+Untagged: anuragsharma7212/mytomcatrepo:1.0
+Untagged: anuragsharma7212/mytomcatrepo@sha256:451f6643fc45d19ff1b4f1765385193790964925a31c308ac405c4ce8c123164
+Untagged: mytomcat:1.0
+Deleted: sha256:35b9f3c3217fa395b149fe962f18e58997620880a148054826a0fcf22f8c961b
+Deleted: sha256:f5ef6774cbcffc7e78b32e560865d5b35683eca811e6c095ebc61f5e80205778
+Untagged: tomcat:latest
+Untagged: tomcat@sha256:6717dc5917faf8b755cceecbe64f006988667a963a4a7899d3698bfb3361d69c
+Deleted: sha256:1488aaf58c739b2ce362a143c50de8152b5cf9d14b5208b8bd61c64b11534621
+Deleted: sha256:41dd9955631144df270a22d217f28e79f4d674310cfc7c0b7f866b0c5f698e7e
+Deleted: sha256:4bbebe64612f018e17af043807d6be2d92f8a0808cc4c36cc4707e28809f2059
+Deleted: sha256:3fbbd270ccc98615fddb106cc2f0e99c785adf12e5c0c9c7f3044ee6e70b5642
+Deleted: sha256:592976b1fd1eb2caf7be9eb976a0b6699f7f8a5017104bcbeecb9cab76a00b9d
+Deleted: sha256:0388835b21d764f276baf4be8396cc22e84a6f442402d03b437fc61e81e4acea
+Deleted: sha256:055d339f8c77be047597bab013bef0056e2b6a414a1225b12539637dcb59482b
+Deleted: sha256:58136eb1ff2719ed3f6a8ef410a2989960f99a7988112e81017638b4527be1c4
+Deleted: sha256:e6d9e14c5186b2546854328eb17f83bb72690820379af71d8b4ad7a566e77085
+Deleted: sha256:81bea2e4eb39ed9ed1ceb0e8ca05cefbdc96bd0b38266c26990c1eb0ed528612
+Deleted: sha256:5707f840eb6421a463261e9f62c9fcc691facd718993a666d5c86751ebb57cc3
+Deleted: sha256:706c0c43e07bd77aba42160b0d0158297caec76c4da6566d856f28b1754f2265
+Deleted: sha256:0db06dff9d9aeb9bed4edde7bd772ad0f3aea497c129d48ed587664d098c6c41
+Untagged: wordpress:latest
+Untagged: wordpress@sha256:ee7641a7a5505a778eb8b4e6f77dcff7c50e2766d9999c59cedd9beadc030ada
+Deleted: sha256:4da64649cb6f90b74cf9ae9ea2cd75285c07b79d0c0190763b0a06f80d3609c3
+Deleted: sha256:6fe988ef606cc3822600139e73b9e51caaa2a7d092c709f2a3261bd180ccb753
+Deleted: sha256:93041562e362a205a6fa376e30ba1cc9c9e3f55cc700c45c44a44c5452fd85d9
+Deleted: sha256:90fe01965825188c332c620ca2bcfdca7341e269705f4716320b81cf9f4085fb
+Deleted: sha256:0465e1c7d2e0f6d3e0b964b5a0f4220425224c18a3c2531f51b9f3e38eca6090
+Deleted: sha256:3134263057136f7721c2ff5073dbdbfeacc37cf8ce592ebd8c0a2f499eda9120
+Deleted: sha256:f4b226d03e29df1a1d5b2e7e78f644b7967c502122715c9c9a0cebc4effa2787
+Deleted: sha256:2416e921bcea7daaa8144e5117a258a0e124af47ec731550d909aaeabe6dc3bc
+Deleted: sha256:6911085f5c2ebbb1b4bb606155f89218772cef1a58364a615ca1961e53a29634
+Deleted: sha256:fa4510ea362133a3998ae9506c180dbe135552272a981a8abb3b8f9b78814ad3
+Deleted: sha256:f2f3e5ee182863c6b6075964b351da9d836faaf10f9a48c0b45b7066d73f9f2d
+Deleted: sha256:a080681611b4d25077949e0951f608f32848cc03f4c3ffb3fdedc6c68ce492f0
+Deleted: sha256:4f43c793ba6535bcb27a1029a3cd249a233f328ecdc609794075a43a682b90ac
+Deleted: sha256:c13e860e8087ae1311e520c51c4ba3436b51e9de7f70ed4cebc2cca5bb5666ae
+Deleted: sha256:1556792e56929cd3b16ca14dcc440b20ddcf480e1a162170d83fa2e16c76955f
+Deleted: sha256:86cbc3ab80aa2b6abf696b429b57a847d76156359b5f54579e72f120312d11a7
+Deleted: sha256:604e8efb15899d1b408584585a1edd457d0117df7eedc0a7c5b2a456764d0898
+Deleted: sha256:9f9d9a8364db0109376255c4130123c9edc975d8c70abce7dfee457ba5298a71
+Deleted: sha256:e05e97aed813fc99dec94b1cecc3ff3791e73a5dc40194b027b39f9648d029c6
+Untagged: mysql:latest
+Untagged: mysql@sha256:415ac63da0ae6725d5aefc9669a1c02f39a00c574fdbc478dfd08db1e97c8f1b
+Deleted: sha256:c7109f74d339896c8e1a7526224f10a3197e7baf674ff03acbab387aa027882a
+Deleted: sha256:35d60530f024aa75c91a123a69099f7f6eaf5ad7001bb983f427f674980d8482
+Deleted: sha256:49d8bb533eee600076e3a513a203ee24044673fcef0c1b79e088b2ba43db2c17
+Deleted: sha256:2e7d501ae7df8ee0eca0fe0b16c6e9fad9a3664811445f38f32636b47366eec3
+Deleted: sha256:6a362ed9781f7b3f0c63b061dfb0f14d9ba10d021df10712a131158c103b0d18
+Deleted: sha256:3e58b58898622709169f72e7fa20244e084316f3ee66142728bce3f35bb9538b
+Untagged: mysql:5.7
+Untagged: mysql@sha256:c3594c6528b31c6222ba426d836600abd45f554d078ef661d3c882604c70ad0a
+Deleted: sha256:a1aa4f76fab910095dfcf4011f32fbe7acdb84c46bb685a8cf0a75e7d0da8f6b
+Deleted: sha256:1e469e8670a36fe95b3d93fa42cfb8af28fa008eefc8f54c959b25ee2c0aede9
+Deleted: sha256:dfc8a50c616d3fe82f9a73916f5177b3b45d9e8c9a66fadd75050c732703f37c
+Deleted: sha256:03f1d8adf4a4d0a5b5921c20692e68144c00c7e4afdfb321d2db90a4953675ce
+Deleted: sha256:f299ef3d6713adeb2f1df6f1bbf4d4a2373fb4d1f8ba840363b2714cb7316fa1
+Deleted: sha256:4beb9add2b61bbae54c13e9d9f374b1fe8573226c2fe889bdd5dc8eed19ffbc1
+Deleted: sha256:b3a6af4f3db06bbe8f661019f7dbc354b5e63318fca01d8f1e6218f0afbaa5eb
+Deleted: sha256:037818566b488757260ae3d0064fbf6e47365cd08dc6409b7a018a512ef17f25
+Deleted: sha256:000ec65531a617f550ee04f67c875b70f4b395af00b5f5bb7ed480b17078bc0b
+Deleted: sha256:11d387a2efcce7596530d6be2299b6528b0afe070aba3caf3432ca31c3b0132d
+Deleted: sha256:a883a9d05facd6220d9251787142b41cc6675f247bc47c94071e665adf65dbbf
+Deleted: sha256:cf5b3c6798f77b1f78bf4e297b27cfa5b6caa982f04caeb5de7d13c255fd7a1e
+Untagged: httpd:latest
+Untagged: httpd@sha256:6eceaadeab70e6355edb3fef41b8c0b34cafd9b00a17252c875530dcc2d98522
+Deleted: sha256:3bd2a941224f5db223a43e33454ed7b0a19f508c639c056a27e0a48a314969f1
+Deleted: sha256:b152c2fe0e0b84cce340f91e6950569d1a190a1428135735ea5c552a1ba2c9ce
+Deleted: sha256:78971b93eb4c10b5683be30c8c57b51ec69d20194fa303ee8fb0ad70c8e71461
+Deleted: sha256:cf5f6dc294d6ab63edad7d34107dc1f05e2fed66919c3444d92555624c1be25f
+Deleted: sha256:6fb6246d14e214ead4424482b2c53059e7e2a82c2d9fa8aa3a9ef4d574051e29
+Deleted: sha256:6270adb5794c6987109e54af00ab456977c5d5cc6f1bc52c1ce58d32ec0f15f4
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: anuragsharma7212/mytomcatrepo
+Error: No such image: 1.0
+Error: No such image: 16
+Error: No such image: minutes
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: mytomcat
+Error: No such image: 1.0
+Error: No such image: 35b9f3c3217f
+Error: No such image: 16
+Error: No such image: minutes
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: latest
+Error: No such image: 1488aaf58c73
+Error: No such image: 5
+Error: No such image: hours
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: latest
+Error: No such image: 4da64649cb6f
+Error: No such image: 38
+Error: No such image: hours
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: 5.7
+Error: No such image: 2
+Error: No such image: days
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: mysql
+Error: No such image: latest
+Error: No such image: c7109f74d339
+Error: No such image: 2
+Error: No such image: days
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: latest
+Error: No such image: 3bd2a941224f
+Error: No such image: 7
+Error: No such image: days
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+[root@ip-172-31-21-44 ~]# docker run -p -d 8081:8080 prashanth121rp/mytomcatrepo:1.0
+docker: Invalid containerPort: -d.
+See 'docker run --help'.
+[root@ip-172-31-21-44 ~]# docker run -d -p 8081:8080 prashanth121rp/mytomcatrepo:1.0
+Unable to find image 'prashanth121rp/mytomcatrepo:1.0' locally
+1.0: Pulling from prashanth121rp/mytomcatrepo
+c5e155d5a1d1: Pull complete
+221d80d00ae9: Pull complete
+4250b3117dca: Pull complete
+3b7ca19181b2: Pull complete
+acd9a038f588: Pull complete
+2aa7bd799199: Pull complete
+05b9cbca178d: Pull complete
+07e346d8d312: Pull complete
+f47d33a776bf: Pull complete
+4986f827da91: Pull complete
+86773080e434: Pull complete
+49bdc32f36de: Pull complete
+7e520ae5882a: Pull complete
+Digest: sha256:a69fd8c0bfe3c2894f09c475665c5a686aa4e7ae5fe50f907b03d12cc79a5c15
+Status: Downloaded newer image for prashanth121rp/mytomcatrepo:1.0
+2ead966c2dc565040b293ea75b98b3a894c7dada90e28d2d72df9f4260d2cd0a
+[root@ip-172-31-21-44 ~]# top
+top - 05:15:15 up 56 min,  1 user,  load average: 0.00, 0.00, 0.00
+Tasks:  82 total,   2 running,  57 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.0%us,  0.0%sy,  0.0%ni,100.0%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+Mem:   1009420k total,   915908k used,    93512k free,    48712k buffers
+Swap:        0k total,        0k used,        0k free,   643192k cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND
+ 4665 root      20   0 15360 2160 1872 R  0.3  0.2   0:00.46 top
+    1 root      20   0 19692 2604 2280 S  0.0  0.3   0:01.20 init
+    2 root      20   0     0    0    0 S  0.0  0.0   0:00.00 kthreadd
+    4 root       0 -20     0    0    0 I  0.0  0.0   0:00.00 kworker/0:0H
+    6 root       0 -20     0    0    0 I  0.0  0.0   0:00.00 mm_percpu_wq
+    7 root      20   0     0    0    0 S  0.0  0.0   0:00.10 ksoftirqd/0
+    8 root      20   0     0    0    0 I  0.0  0.0   0:00.07 rcu_sched
+    9 root      20   0     0    0    0 I  0.0  0.0   0:00.00 rcu_bh
+   10 root      RT   0     0    0    0 S  0.0  0.0   0:00.00 migration/0
+   11 root      RT   0     0    0    0 S  0.0  0.0   0:00.00 watchdog/0
+   12 root      20   0     0    0    0 S  0.0  0.0   0:00.00 cpuhp/0
+   13 root      20   0     0    0    0 S  0.0  0.0   0:00.00 kdevtmpfs
+   14 root       0 -20     0    0    0 I  0.0  0.0   0:00.00 netns
+   15 root      20   0     0    0    0 I  0.0  0.0   0:00.19 kworker/u30:1
+   20 root      20   0     0    0    0 S  0.0  0.0   0:00.00 xenbus
+   21 root      20   0     0    0    0 S  0.0  0.0   0:00.01 xenwatch
+   22 root      20   0     0    0    0 I  0.0  0.0   0:00.26 kworker/0:1
+  159 root      20   0     0    0    0 S  0.0  0.0   0:00.00 khungtaskd
+  160 root      20   0     0    0    0 S  0.0  0.0   0:00.00 oom_reaper
+  161 root       0 -20     0    0    0 I  0.0  0.0   0:00.00 writeback
+  163 root      20   0     0    0    0 S  0.0  0.0   0:00.00 kcompactd0
+[root@ip-172-31-21-44 ~]# vi Dockerfile
+[root@ip-172-31-21-44 ~]# docker build -t myhttpd:1.0 .
+Sending build context to Docker daemon  14.85kB
+Step 1/5 : FROM ubuntu:14.04
+14.04: Pulling from library/ubuntu
+a7344f52cb74: Pull complete
+515c9bb51536: Pull complete
+e1eabe0537eb: Pull complete
+4701f1215c13: Pull complete
+Digest: sha256:2f7c79927b346e436cc14c92bd4e5bd778c3bd7037f35bc639ac1589a7acfa90
+Status: Downloaded newer image for ubuntu:14.04
+ ---> 2c5e00d77a67
+Step 2/5 : MAINTAINER anuragsharma7212@gmail.com
+ ---> Running in 756d3d9956c0
+Removing intermediate container 756d3d9956c0
+ ---> 534322ced465
+Step 3/5 : RUN apt update
+ ---> Running in 2803c6abc1af
+
+WARNING: apt does not have a stable CLI interface yet. Use with caution in scripts.
+
+Get:1 http://security.ubuntu.com trusty-security InRelease [65.9 kB]
+Ign http://archive.ubuntu.com trusty InRelease
+Get:2 http://archive.ubuntu.com trusty-updates InRelease [65.9 kB]
+Get:3 http://security.ubuntu.com trusty-security/main amd64 Packages [1032 kB]
+Get:4 http://archive.ubuntu.com trusty-backports InRelease [65.9 kB]
+Get:5 http://archive.ubuntu.com trusty Release.gpg [933 B]
+Get:6 http://archive.ubuntu.com trusty-updates/main amd64 Packages [1460 kB]
+Get:7 http://security.ubuntu.com trusty-security/restricted amd64 Packages [18.1 kB]
+Get:8 http://security.ubuntu.com trusty-security/universe amd64 Packages [377 kB]
+Get:9 http://security.ubuntu.com trusty-security/multiverse amd64 Packages [4730 B]
+Get:10 http://archive.ubuntu.com trusty-updates/restricted amd64 Packages [21.4 kB]
+Get:11 http://archive.ubuntu.com trusty-updates/universe amd64 Packages [671 kB]
+Get:12 http://archive.ubuntu.com trusty-updates/multiverse amd64 Packages [16.1 kB]
+Get:13 http://archive.ubuntu.com trusty-backports/main amd64 Packages [14.7 kB]
+Get:14 http://archive.ubuntu.com trusty-backports/restricted amd64 Packages [40 B]
+Get:15 http://archive.ubuntu.com trusty-backports/universe amd64 Packages [52.5 kB]
+Get:16 http://archive.ubuntu.com trusty-backports/multiverse amd64 Packages [1392 B]
+Get:17 http://archive.ubuntu.com trusty Release [58.5 kB]
+Get:18 http://archive.ubuntu.com trusty/main amd64 Packages [1743 kB]
+Get:19 http://archive.ubuntu.com trusty/restricted amd64 Packages [16.0 kB]
+Get:20 http://archive.ubuntu.com trusty/universe amd64 Packages [7589 kB]
+Get:21 http://archive.ubuntu.com trusty/multiverse amd64 Packages [169 kB]
+Fetched 13.4 MB in 6s (1985 kB/s)
+Reading package lists...
+Removing intermediate container 2803c6abc1af
+ ---> 52bb43c3fbd2
+Step 4/5 : RUN apt install apache2 -y
+ ---> Running in e55d415f903a
+
+WARNING: apt does not have a stable CLI interface yet. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following extra packages will be installed:
+  apache2-bin apache2-data libapr1 libaprutil1 libaprutil1-dbd-sqlite3
+  libaprutil1-ldap libasn1-8-heimdal libgssapi3-heimdal libhcrypto4-heimdal
+  libheimbase1-heimdal libheimntlm0-heimdal libhx509-5-heimdal
+  libkrb5-26-heimdal libldap-2.4-2 libroken18-heimdal libsasl2-2
+  libsasl2-modules libsasl2-modules-db libwind0-heimdal libxml2 openssl
+  sgml-base ssl-cert xml-core
+Suggested packages:
+  www-browser apache2-doc apache2-suexec-pristine apache2-suexec-custom ufw
+  apache2-utils libsasl2-modules-otp libsasl2-modules-ldap
+  libsasl2-modules-sql libsasl2-modules-gssapi-mit
+  libsasl2-modules-gssapi-heimdal ca-certificates sgml-base-doc
+  openssl-blacklist debhelper
+The following NEW packages will be installed:
+  apache2 apache2-bin apache2-data libapr1 libaprutil1 libaprutil1-dbd-sqlite3
+  libaprutil1-ldap libasn1-8-heimdal libgssapi3-heimdal libhcrypto4-heimdal
+  libheimbase1-heimdal libheimntlm0-heimdal libhx509-5-heimdal
+  libkrb5-26-heimdal libldap-2.4-2 libroken18-heimdal libsasl2-2
+  libsasl2-modules libsasl2-modules-db libwind0-heimdal libxml2 openssl
+  sgml-base ssl-cert xml-core
+0 upgraded, 25 newly installed, 0 to remove and 0 not upgraded.
+Need to get 3442 kB of archives.
+After this operation, 12.6 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libroken18-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [39.9 kB]
+Get:2 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libasn1-8-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [160 kB]
+Get:3 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libhcrypto4-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [84.1 kB]
+Get:4 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libheimbase1-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [29.0 kB]
+Get:5 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libwind0-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [47.9 kB]
+Get:6 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libhx509-5-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [104 kB]
+Get:7 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libkrb5-26-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [196 kB]
+Get:8 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libheimntlm0-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [15.2 kB]
+Get:9 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libgssapi3-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [89.7 kB]
+Get:10 http://archive.ubuntu.com/ubuntu/ trusty/main libsasl2-modules-db amd64 2.1.25.dfsg1-17build1 [14.9 kB]
+Get:11 http://archive.ubuntu.com/ubuntu/ trusty/main libsasl2-2 amd64 2.1.25.dfsg1-17build1 [56.5 kB]
+Get:12 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libldap-2.4-2 amd64 2.4.31-1+nmu2ubuntu8.5 [1Progress: [  0%]
+Progress: [  2%]  ive.ubuntu.com/ubuntu/ trusty-updates/main libxml2 amd64 2.9.1+dfsg1-3ubuntu4.13 [573 kB]
+Progress: [  3%]  ive.ubuntu.com/ubuntu/ trusty/main sgml-base all 1.26+nmu4ubuntu1 [12.5 kB]
+Progress: [  4%]  ive.ubuntu.com/ubuntu/ trusty/main libapr1 amd64 1.5.0-1 [85.1 kB]
+Get:16 http://archive.ubuntu.com/ubuntu/ trusty/main libaprutil1 amd64 1.5.3-1 [76.4 kB]
+Progress: [  5%]  ive.ubuntu.com/ubuntu/ trusty/main libsasl2-modules amd64 2.1.25.dfsg1-17build1 [64.3 kBProgress: [  7%]
+Get:18 http://archive.ubuntu.com/ubuntu/ trusty-updates/main openssl amd64 1.0.1f-1ubuntu2.27 [489 kB]
+Progress: [  8%]  ive.ubuntu.com/ubuntu/ trusty/main xml-core all 0.13+nmu2 [23.3 kB]
+Progress: [  9%]  ive.ubuntu.com/ubuntu/ trusty/main libaprutil1-dbd-sqlite3 amd64 1.5.3-1 [10.5 kB]
+Get:21 http://archive.ubuntu.com/ubuntu/ trusty/main libaprutil1-ldap amd64 1.5.3-1 [8634 B]
+Progress: [ 10%]  ive.ubuntu.com/ubuntu/ trusty-updates/main apache2-bin amd64 2.4.7-1ubuntu4.22 [845 kB]
+Progress: [ 12%]  ive.ubuntu.com/ubuntu/ trusty-updates/main apache2-data all 2.4.7-1ubuntu4.22 [160 kB]
+Get:24 http://archive.ubuntu.com/ubuntu/ trusty-updates/main apache2 amd64 2.4.7-1ubuntu4.22 [87.4 kB]
+Get:25 http://archive.ubuntu.com/ubuntu/ trusty/main ssl-cert all 1.0.33 [16.6 kB]
+Progress: [ 14%]   initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+Progress: [ 15%]  ack to frontend: Readline
+Progress: [ 16%]   initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+Progress: [ 17%]  ack to frontend: Teletype
+Progress: [ 19%]   unable to re-open stdin:
+Fetched 3442 kB in 4s (792 kB/s)
+Progress: [ 20%]  ly unselected package libroken18-heimdal:amd64.
+Progress: [ 21%]  ... 11585 files and directories currently installed.)
+Preparing to unpack .../libroken18-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 22%]  18-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 24%]  ly unselected package libasn1-8-heimdal:amd64.
+Preparing to unpack .../libasn1-8-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Unpacking libasn1-8-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 26%]  ly unselected package libhcrypto4-heimdal:amd64.
+Preparing to unpack .../libhcrypto4-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 27%]  to4-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 28%]  ly unselected package libheimbase1-heimdal:amd64.
+Preparing to unpack .../libheimbase1-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 29%]  ase1-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 31%]  ly unselected package libwind0-heimdal:amd64.
+Preparing to unpack .../libwind0-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 32%]  -heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 33%]  ly unselected package libhx509-5-heimdal:amd64.
+Preparing to unpack .../libhx509-5-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 34%]  -5-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 36%]  ly unselected package libkrb5-26-heimdal:amd64.
+Preparing to unpack .../libkrb5-26-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Unpacking libkrb5-26-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 38%]  ly unselected package libheimntlm0-heimdal:amd64.
+Preparing to unpack .../libheimntlm0-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 39%]  tlm0-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 40%]  ly unselected package libgssapi3-heimdal:amd64.
+Preparing to unpack .../libgssapi3-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 41%]  i3-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 43%]  ly unselected package libsasl2-modules-db:amd64.
+Preparing to unpack .../libsasl2-modules-db_2.1.25.dfsg1-17build1_amd64.deb ...
+Progress: [ 44%]  -modules-db:amd64 (2.1.25.dfsg1-17build1) ...
+Progress: [ 45%]  ly unselected package libsasl2-2:amd64.
+Preparing to unpack .../libsasl2-2_2.1.25.dfsg1-17build1_amd64.deb ...
+Progress: [ 46%]  -2:amd64 (2.1.25.dfsg1-17build1) ...
+Progress: [ 48%]  ly unselected package libldap-2.4-2:amd64.
+Preparing to unpack .../libldap-2.4-2_2.4.31-1+nmu2ubuntu8.5_amd64.deb ...
+Unpacking libldap-2.4-2:amd64 (2.4.31-1+nmu2ubuntu8.5) ...
+Progress: [ 50%]  ly unselected package libxml2:amd64.
+Preparing to unpack .../libxml2_2.9.1+dfsg1-3ubuntu4.13_amd64.deb ...
+Progress: [ 51%]  amd64 (2.9.1+dfsg1-3ubuntu4.13) ...
+Progress: [ 52%]  ly unselected package sgml-base.
+Preparing to unpack .../sgml-base_1.26+nmu4ubuntu1_all.deb ...
+Progress: [ 53%]  e (1.26+nmu4ubuntu1) ...
+Progress: [ 55%]  ly unselected package libapr1:amd64.
+Preparing to unpack .../libapr1_1.5.0-1_amd64.deb ...
+Progress: [ 56%]  amd64 (1.5.0-1) ...
+Progress: [ 57%]  ly unselected package libaprutil1:amd64.
+Preparing to unpack .../libaprutil1_1.5.3-1_amd64.deb ...
+Progress: [ 58%]  il1:amd64 (1.5.3-1) ...
+Progress: [ 60%]  ly unselected package libsasl2-modules:amd64.
+Preparing to unpack .../libsasl2-modules_2.1.25.dfsg1-17build1_amd64.deb ...
+Progress: [ 61%]  -modules:amd64 (2.1.25.dfsg1-17build1) ...
+Progress: [ 63%]  ly unselected package openssl.
+Progress: [ 64%]  k .../openssl_1.0.1f-1ubuntu2.27_amd64.deb ...
+Progress: [ 66%]  (1.0.1f-1ubuntu2.27) ...
+Progress: [ 68%]  ly unselected package xml-core.
+Progress: [ 69%]  k .../xml-core_0.13+nmu2_all.deb ...
+Progress: [ 71%]   (0.13+nmu2) ...
+Progress: [ 72%]  ly unselected package libaprutil1-dbd-sqlite3:amd64.
+Progress: [ 74%]  k .../libaprutil1-dbd-sqlite3_1.5.3-1_amd64.deb ...
+Progress: [ 76%]  il1-dbd-sqlite3:amd64 (1.5.3-1) ...
+Progress: [ 77%]  ly unselected package libaprutil1-ldap:amd64.
+Progress: [ 79%]  k .../libaprutil1-ldap_1.5.3-1_amd64.deb ...
+Progress: [ 80%]  il1-ldap:amd64 (1.5.3-1) ...
+Progress: [ 82%]  ly unselected package apache2-bin.
+Progress: [ 84%]  k .../apache2-bin_2.4.7-1ubuntu4.22_amd64.deb ...
+Progress: [ 85%]  bin (2.4.7-1ubuntu4.22) ...
+Progress: [ 87%]  ly unselected package apache2-data.
+Progress: [ 88%]  k .../apache2-data_2.4.7-1ubuntu4.22_all.deb ...
+Progress: [ 89%]  data (2.4.7-1ubuntu4.22) ...
+Progress: [ 91%]  ly unselected package apache2.
+Progress: [ 92%]  k .../apache2_2.4.7-1ubuntu4.22_amd64.deb ...
+Progress: [ 94%]  (2.4.7-1ubuntu4.22) ...
+Progress: [ 96%]  ly unselected package ssl-cert.
+Preparing to unpack .../ssl-cert_1.0.33_all.deb ...
+Unpacking ssl-cert (1.0.33) ...
+Processing triggers for ureadahead (0.100.0-16) ...
+Setting up libroken18-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libasn1-8-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libhcrypto4-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libheimbase1-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libwind0-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libhx509-5-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libkrb5-26-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libheimntlm0-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libgssapi3-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libsasl2-modules-db:amd64 (2.1.25.dfsg1-17build1) ...
+Setting up libsasl2-2:amd64 (2.1.25.dfsg1-17build1) ...
+Setting up libldap-2.4-2:amd64 (2.4.31-1+nmu2ubuntu8.5) ...
+Setting up libxml2:amd64 (2.9.1+dfsg1-3ubuntu4.13) ...
+Setting up sgml-base (1.26+nmu4ubuntu1) ...
+Setting up libapr1:amd64 (1.5.0-1) ...
+Setting up libaprutil1:amd64 (1.5.3-1) ...
+Setting up libsasl2-modules:amd64 (2.1.25.dfsg1-17build1) ...
+Setting up openssl (1.0.1f-1ubuntu2.27) ...
+Setting up xml-core (0.13+nmu2) ...
+Setting up libaprutil1-dbd-sqlite3:amd64 (1.5.3-1) ...
+Setting up libaprutil1-ldap:amd64 (1.5.3-1) ...
+Setting up apache2-bin (2.4.7-1ubuntu4.22) ...
+Setting up apache2-data (2.4.7-1ubuntu4.22) ...
+Progress: [ 97%]   (2.4.7-1ubuntu4.22) ...
+Enabling module mpm_event.
+Enabling module authz_core.
+Enabling module authz_host.
+Enabling module authn_core.
+Enabling module auth_basic.
+Progress: [ 98%]  cess_compat.
+Enabling module authn_file.
+Progress: [ 99%]  thz_user.
+Progress: [100%]  ias.
+Enabling module dir.
+Enabling module autoindex.
+Enabling module env.
+Enabling module mime.
+Enabling module negotiation.
+Enabling module setenvif.
+Enabling module filter.
+Enabling module deflate.
+Enabling module status.
+Enabling conf charset.
+Enabling conf localized-error-pages.
+Enabling conf other-vhosts-access-log.
+Enabling conf security.
+Enabling conf serve-cgi-bin.
+Enabling site 000-default.
+invoke-rc.d: policy-rc.d denied execution of start.
+Setting up ssl-cert (1.0.33) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+Processing triggers for libc-bin (2.19-0ubuntu6.15) ...
+Processing triggers for sgml-base (1.26+nmu4ubuntu1) ...
+Processing triggers for ureadahead (0.100.0-16) ...
+Removing intermediate container e55d415f903a
+ ---> efd3fbc349b2
+Step 5/5 : EXPOSE 80
+ ---> Running in e386cc6e4db8
+Removing intermediate container e386cc6e4db8
+ ---> 4f97eeb15433
+Successfully built 4f97eeb15433
+Successfully tagged myhttpd:1.0
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY                    TAG                 IMAGE ID            CREATED             SIZE
+myhttpd                       1.0                 4f97eeb15433        8 seconds ago       216MB
+prashanth121rp/mytomcatrepo   1.0                 e2fcf13bd516        37 minutes ago      522MB
+ubuntu                        14.04               2c5e00d77a67        4 weeks ago         188MB
+[root@ip-172-31-21-44 ~]# docker run -d -p 81:80 myhttpd:1.0
+8d57d5d62659ed607bc5e9b7384cabebedd9c3e0d801eaffe516bd95f566c076
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE                             COMMAND             CREATED             STATUS              PORTS                    NAMES
+2ead966c2dc5        prashanth121rp/mytomcatrepo:1.0   "catalina.sh run"   21 minutes ago      Up 21 minutes       0.0.0.0:8081->8080/tcp   romantic_cori
+[root@ip-172-31-21-44 ~]# docker ps -a
+CONTAINER ID        IMAGE                             COMMAND             CREATED             STATUS                      PORTS                    NAMES
+8d57d5d62659        myhttpd:1.0                       "/bin/bash"         12 seconds ago      Exited (0) 11 seconds ago                            jovial_bose
+2ead966c2dc5        prashanth121rp/mytomcatrepo:1.0   "catalina.sh run"   21 minutes ago      Up 21 minutes               0.0.0.0:8081->8080/tcp   romantic_cori
+[root@ip-172-31-21-44 ~]# docker run -d -iConnection reset by 13.232.236.149 port 22
+
+anura@DESKTOP-NSONJ5O MINGW64 ~/Downloads
+$ update-alternatives: warning: skip creation of /usr/share/man/man1/editor.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group editor) doesn't existja/man1/editor.1.gz because associated file /usr/share/man/ja                                             ru/man1/editor.1.gz because associated file /usr/share/man/ru                                             pl/man1/editor.1.gz because associated file /usr/share/man/pl                                             it/man1/editor.1.gz because associated file /usr/share/man/it                                             fr/man1/editor.1.gz because associated file /usr/share/man/fr    warning: skip creation of /usr/share/man/man1/ex.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group ex) doesn't exist        ja/man1/ex.1.gz because associated file /usr/share/man/ja                                                 ru/man1/ex.1.gz because associated file /usr/share/man/ru                                                 pl/man1/ex.1.gz because associated file /usr/share/man/pl                                                 it/man1/ex.1.gz because associated file /usr/share/man/it                                                 fr/man1/ex.1.gz because associated file /usr/share/man/fr        warning: skip creation of /usr/share/man/man1/view.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group view) doesn't exist    ja/man1/view.1.gz because associated file /usr/share/man/ja                                               ru/man1/view.1.gz because associated file /usr/share/man/ru                                               pl/man1/view.1.gz because associated file /usr/share/man/pl                                               it/man1/view.1.gz because associated file /usr/share/man/it                                               fr/man1/view.1.gz because associated file /usr/share/man/fr      warning: skip creation of /usr/share/man/man1/vi.1.gz because associated file /usr/share/man/man1/vim.1.gz (of link group vi) doesn't exist        ja/man1/vi.1.gz because associated file /usr/share/man/ja                                                 ru/man1/vi.1.gz because associated file /usr/share/man/ru                                                 pl/man1/vi.1.gz because associated file /usr/share/man/pl                                                 it/man1/vi.1.gz because associated file /usr/share/man/it                                               ^C
+
+anura@DESKTOP-NSONJ5O MINGW64 ~/Downloads
+$ ssh -i "Key1.pem" ec2-user@ec2-13-232-236-149.ap-south-1.compute.amazonaws.com
+ssh: Could not resolve hostname ec2-13-232-236-149.ap-south-1.compute.amazonaws.com: Name or service not known
+
+anura@DESKTOP-NSONJ5O MINGW64 ~/Downloads
+$ ssh -i "Key1.pem" ec2-user@ec2-13-232-236-149.ap-south-1.compute.amazonaws.com
+Last login: Thu Jun 13 04:19:43 2019 from 103.214.60.108
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-ami/2018.03-release-notes/
+3 package(s) needed for security, out of 3 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@ip-172-31-21-44 ~]$ sudo -i
+[root@ip-172-31-21-44 ~]# docker run -dit -p 81:80 myhttpd:1.0
+6b23b3ba8b85f4f316d1beb9647f6ad584362ed5a8bbfdd5075ae694d962302a
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE                             COMMAND             CREATED             STATUS              PORTS                    NAMES
+6b23b3ba8b85        myhttpd:1.0                       "/bin/bash"         4 seconds ago       Up 3 seconds        0.0.0.0:81->80/tcp       sharp_lamarr
+2ead966c2dc5        prashanth121rp/mytomcatrepo:1.0   "catalina.sh run"   25 minutes ago      Up 25 minutes       0.0.0.0:8081->8080/tcp   romantic_cori
+[root@ip-172-31-21-44 ~]# docker exec -it 6b23b3ba8b85
+"docker exec" requires at least 2 arguments.
+See 'docker exec --help'.
+
+Usage:  docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
+
+Run a command in a running container
+[root@ip-172-31-21-44 ~]# docker exec -it 6b23b3ba8b85 /bin/bash
+root@6b23b3ba8b85:/# service apache2 status
+ * apache2 is not running
+root@6b23b3ba8b85:/# service apache2 start
+ * Starting web server apache2                                                                            /usr/sbin/apache2ctl: 87: ulimit: error setting limit (Operation not permitted)
+Setting ulimit failed. See README.Debian for more information.
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.17.0.3. Set the 'ServerName' directive globally to suppress this message
+ *
+root@6b23b3ba8b85:/# service apache2 status
+ * apache2 is running
+root@6b23b3ba8b85:/# exit
+[root@ip-172-31-21-44 ~]# vi Dockerfile
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE                             COMMAND             CREATED             STATUS              PORTS                    NAMES
+6b23b3ba8b85        myhttpd:1.0                       "/bin/bash"         8 minutes ago       Up 8 minutes        0.0.0.0:81->80/tcp       sharp_lamarr
+2ead966c2dc5        prashanth121rp/mytomcatrepo:1.0   "catalina.sh run"   33 minutes ago      Up 33 minutes       0.0.0.0:8081->8080/tcp   romantic_cori
+[root@ip-172-31-21-44 ~]# docker build -t myhttpd:1.1
+"docker build" requires exactly 1 argument.
+See 'docker build --help'.
+
+Usage:  docker build [OPTIONS] PATH | URL | -
+
+Build an image from a Dockerfile
+[root@ip-172-31-21-44 ~]# docker build -t myhttpd:1.1 .
+Sending build context to Docker daemon  14.85kB
+Step 1/6 : FROM ubuntu:14.04
+ ---> 2c5e00d77a67
+Step 2/6 : MAINTAINER anuragsharma7212@gmail.com
+ ---> Using cache
+ ---> 534322ced465
+Step 3/6 : RUN apt update
+ ---> Using cache
+ ---> 52bb43c3fbd2
+Step 4/6 : RUN apt install apache2 -y
+ ---> Using cache
+ ---> efd3fbc349b2
+Step 5/6 : EXPOSE 80
+ ---> Using cache
+ ---> 4f97eeb15433
+Step 6/6 : CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
+ ---> Running in 28e790079f4b
+Removing intermediate container 28e790079f4b
+ ---> 897fdea36874
+Successfully built 897fdea36874
+Successfully tagged myhttpd:1.1
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY                    TAG                 IMAGE ID            CREATED             SIZE
+myhttpd                       1.1                 897fdea36874        13 seconds ago      216MB
+myhttpd                       1.0                 4f97eeb15433        19 minutes ago      216MB
+prashanth121rp/mytomcatrepo   1.0                 e2fcf13bd516        About an hour ago   522MB
+ubuntu                        14.04               2c5e00d77a67        4 weeks ago         188MB
+[root@ip-172-31-21-44 ~]# docker rm -f $(docker ps -aq)
+6b23b3ba8b85
+8d57d5d62659
+2ead966c2dc5
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@ip-172-31-21-44 ~]# docker run -d -p 82:80 myhttpd:1.1
+e49f1d5e05fc44c28eddb50af571fa4aa527b0e8b9fce6f55b45c993978cade0
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@ip-172-31-21-44 ~]# docker run -dit -p 82:80 myhttpd:1.1
+cc2a340a57affee1b4afbe19246ec81ad96d8f9e3769a282bc697879c1b333f2
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@ip-172-31-21-44 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS                          PORTS               NAMES
+cc2a340a57af        myhttpd:1.1         "/usr/sbin/apache2 -…"   30 seconds ago       Exited (1) 29 seconds ago                           priceless_jackson
+e49f1d5e05fc        myhttpd:1.1         "/usr/sbin/apache2 -…"   About a minute ago   Exited (1) About a minute ago                       wonderful_curie
+[root@ip-172-31-21-44 ~]# docker log cc2a340a57af
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Options:
+      --config string      Location of client config files (default "/root/.docker")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket(s) to connect to
+  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default
+                           "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/root/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/root/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/root/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Management Commands:
+  config      Manage Docker configs
+  container   Manage containers
+  image       Manage images
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  stack       Manage Docker stacks
+  swarm       Manage Swarm
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  build       Build an image from a Dockerfile
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  exec        Run a command in a running container
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  images      List images
+  import      Import the contents from a tarball to create a filesystem image
+  info        Display system-wide information
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  login       Log in to a Docker registry
+  logout      Log out from a Docker registry
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  ps          List containers
+  pull        Pull an image or a repository from a registry
+  push        Push an image or a repository to a registry
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  run         Run a command in a new container
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  search      Search the Docker Hub for images
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  version     Show the Docker version information
+  wait        Block until one or more containers stop, then print their exit codes
+
+Run 'docker COMMAND --help' for more information on a command.
+[root@ip-172-31-21-44 ~]# docker logs cc2a340a57af
+[Thu Jun 13 05:39:22.138923 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_LOCK_DIR} is not defined
+[Thu Jun 13 05:39:22.139110 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_PID_FILE} is not defined
+[Thu Jun 13 05:39:22.139216 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_RUN_USER} is not defined
+[Thu Jun 13 05:39:22.139284 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_RUN_GROUP} is not defined
+[Thu Jun 13 05:39:22.139371 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_LOG_DIR} is not defined
+[Thu Jun 13 05:39:22.142264 2019] [core:warn] [pid 1:tid 139758541436800] AH00111: Config variable ${APACHE_LOG_DIR} is not defined
+[Thu Jun 13 05:39:22.142513 2019] [core:warn] [pid 1:tid 139758541436800] AH00111: Config variable ${APACHE_LOG_DIR} is not defined
+[Thu Jun 13 05:39:22.142601 2019] [core:warn] [pid 1:tid 139758541436800] AH00111: Config variable ${APACHE_LOG_DIR} is not defined
+AH00526: Syntax error on line 74 of /etc/apache2/apache2.conf:
+Invalid Mutex directory in argument file:${APACHE_LOCK_DIR}
+[root@ip-172-31-21-44 ~]# more Dockerfile
+FROM ubuntu:14.04
+MAINTAINER anuragsharma7212@gmail.com
+RUN apt update
+RUN apt install apache2 -y
+EXPOSE 80
+CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
+[root@ip-172-31-21-44 ~]# vi Dockerfile
+[root@ip-172-31-21-44 ~]# docker build -t myhttpd:1.2 .
+Sending build context to Docker daemon  14.85kB
+Step 1/7 : FROM ubuntu:14.04
+ ---> 2c5e00d77a67
+Step 2/7 : MAINTAINER anuragsharma7212@gmail.com
+ ---> Using cache
+ ---> 534322ced465
+Step 3/7 : RUN apt update
+ ---> Using cache
+ ---> 52bb43c3fbd2
+Step 4/7 : RUN apt install apache2 -y
+ ---> Using cache
+ ---> efd3fbc349b2
+Step 5/7 : ENV APACHE_LOG_DIR /var/log/apache2
+ ---> Running in 3f9823e988d2
+Removing intermediate container 3f9823e988d2
+ ---> 52c4c1795cb8
+Step 6/7 : EXPOSE 80
+ ---> Running in e2c6a8c41bb3
+Removing intermediate container e2c6a8c41bb3
+ ---> d18f3eee43ff
+Step 7/7 : CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
+ ---> Running in 3e3ecdf160f3
+Removing intermediate container 3e3ecdf160f3
+ ---> 68fa4721c5ec
+Successfully built 68fa4721c5ec
+Successfully tagged myhttpd:1.2
+[root@ip-172-31-21-44 ~]# docker run -dit -p 82:80 myhttpd:1.2
+e5b3eeebd6c86fc58397f3526b7d1855b3203944d20f4d0d1bfa4d9b0404793b
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@ip-172-31-21-44 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
+e5b3eeebd6c8        myhttpd:1.2         "/usr/sbin/apache2 -…"   15 seconds ago      Exited (1) 15 seconds ago                       objective_banach
+cc2a340a57af        myhttpd:1.1         "/usr/sbin/apache2 -…"   7 minutes ago       Exited (1) 7 minutes ago                        priceless_jackson
+e49f1d5e05fc        myhttpd:1.1         "/usr/sbin/apache2 -…"   8 minutes ago       Exited (1) 8 minutes ago                        wonderful_curie
+[root@ip-172-31-21-44 ~]# docker logs e5b3eeebd6c8
+[Thu Jun 13 05:46:56.392890 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_LOCK_DIR} is not defined
+[Thu Jun 13 05:46:56.393082 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_PID_FILE} is not defined
+[Thu Jun 13 05:46:56.393182 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_RUN_USER} is not defined
+[Thu Jun 13 05:46:56.393252 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_RUN_GROUP} is not defined
+AH00526: Syntax error on line 74 of /etc/apache2/apache2.conf:
+Invalid Mutex directory in argument file:${APACHE_LOCK_DIR}
+[root@ip-172-31-21-44 ~]# vi Dockerfile
+[root@ip-172-31-21-44 ~]# docker run -dit -p 82:80 myhttpd:1.3
+Unable to find image 'myhttpd:1.3' locally
+docker: Error response from daemon: pull access denied for myhttpd, repository does not exist or may require 'docker login'.
+See 'docker run --help'.
+[root@ip-172-31-21-44 ~]# docker build -t myhttpd:1.3 .
+Sending build context to Docker daemon  14.85kB
+Step 1/9 : FROM ubuntu:14.04
+ ---> 2c5e00d77a67
+Step 2/9 : MAINTAINER anuragsharma7212@gmail.com
+ ---> Using cache
+ ---> 534322ced465
+Step 3/9 : RUN apt update
+ ---> Using cache
+ ---> 52bb43c3fbd2
+Step 4/9 : RUN apt install apache2 -y
+ ---> Using cache
+ ---> efd3fbc349b2
+Step 5/9 : ENV APACHE_LOG_DIR /var/log/apache2
+ ---> Using cache
+ ---> 52c4c1795cb8
+Step 6/9 : ENV APACHE_RUN_USER www-data
+ ---> Running in 3efd5843f140
+Removing intermediate container 3efd5843f140
+ ---> a0f271172d57
+Step 7/9 : ENV APACHE_RUN_GROUP www-data
+ ---> Running in 596c5fc18f48
+Removing intermediate container 596c5fc18f48
+ ---> 412a3f210e9f
+Step 8/9 : EXPOSE 80
+ ---> Running in 1e997962a915
+Removing intermediate container 1e997962a915
+ ---> 30189fe9461d
+Step 9/9 : CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
+ ---> Running in 776f7f5a4d80
+Removing intermediate container 776f7f5a4d80
+ ---> 3f81ec9347e7
+Successfully built 3f81ec9347e7
+Successfully tagged myhttpd:1.3
+[root@ip-172-31-21-44 ~]# docker run -dit -p 82:80 myhttpd:1.3
+a25678c4d2a0e6a447d130ee3f2b188e0437db34e45f0de474752b90f164a42b
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@ip-172-31-21-44 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
+a25678c4d2a0        myhttpd:1.3         "/usr/sbin/apache2 -…"   14 seconds ago      Exited (1) 13 seconds ago                       happy_snyder
+e5b3eeebd6c8        myhttpd:1.2         "/usr/sbin/apache2 -…"   6 minutes ago       Exited (1) 6 minutes ago                        objective_banach
+cc2a340a57af        myhttpd:1.1         "/usr/sbin/apache2 -…"   13 minutes ago      Exited (1) 13 minutes ago                       priceless_jackson
+e49f1d5e05fc        myhttpd:1.1         "/usr/sbin/apache2 -…"   14 minutes ago      Exited (1) 14 minutes ago                       wonderful_curie
+[root@ip-172-31-21-44 ~]# docker logs a25678c4d2a0
+[Thu Jun 13 05:52:55.752899 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_LOCK_DIR} is not defined
+[Thu Jun 13 05:52:55.753093 2019] [core:warn] [pid 1] AH00111: Config variable ${APACHE_PID_FILE} is not defined
+AH00526: Syntax error on line 74 of /etc/apache2/apache2.conf:
+Invalid Mutex directory in argument file:${APACHE_LOCK_DIR}
+[root@ip-172-31-21-44 ~]# vi Dockerfile
+[root@ip-172-31-21-44 ~]# docker build -t myhttpd:1.4 .
+Sending build context to Docker daemon  14.85kB
+Step 1/11 : FROM ubuntu:14.04
+ ---> 2c5e00d77a67
+Step 2/11 : MAINTAINER anuragsharma7212@gmail.com
+ ---> Using cache
+ ---> 534322ced465
+Step 3/11 : RUN apt update
+ ---> Using cache
+ ---> 52bb43c3fbd2
+Step 4/11 : RUN apt install apache2 -y
+ ---> Using cache
+ ---> efd3fbc349b2
+Step 5/11 : ENV APACHE_LOG_DIR /var/log/apache2
+ ---> Using cache
+ ---> 52c4c1795cb8
+Step 6/11 : ENV APACHE_RUN_USER www-data
+ ---> Using cache
+ ---> a0f271172d57
+Step 7/11 : ENV APACHE_RUN_GROUP www-data
+ ---> Using cache
+ ---> 412a3f210e9f
+Step 8/11 : ENV APACHE_LOCK_DIR /var/log/apache2
+ ---> Running in e97ad0f1ebd4
+Removing intermediate container e97ad0f1ebd4
+ ---> cc6a89d4a1b3
+Step 9/11 : ENV APACHE_PID_FILE /var/log/apache2
+ ---> Running in 5af6fdb39cab
+Removing intermediate container 5af6fdb39cab
+ ---> 61d2ad508dc6
+Step 10/11 : EXPOSE 80
+ ---> Running in c939d356fc07
+Removing intermediate container c939d356fc07
+ ---> 32ca31b735a8
+Step 11/11 : CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
+ ---> Running in ffeca1b6f2f1
+Removing intermediate container ffeca1b6f2f1
+ ---> fe0012bad38e
+Successfully built fe0012bad38e
+Successfully tagged myhttpd:1.4
+[root@ip-172-31-21-44 ~]# docker run -dit -p 82:80 myhttpd:1.4
+bff4b089754a1cfe3e4be5f2a3629bd5b2c797e191cb343c7f2cf994fc9277a9
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@ip-172-31-21-44 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
+bff4b089754a        myhttpd:1.4         "/usr/sbin/apache2 -…"   14 seconds ago      Exited (1) 14 seconds ago                       musing_pasteur
+a25678c4d2a0        myhttpd:1.3         "/usr/sbin/apache2 -…"   4 minutes ago       Exited (1) 4 minutes ago                        happy_snyder
+e5b3eeebd6c8        myhttpd:1.2         "/usr/sbin/apache2 -…"   10 minutes ago      Exited (1) 10 minutes ago                       objective_banach
+cc2a340a57af        myhttpd:1.1         "/usr/sbin/apache2 -…"   17 minutes ago      Exited (1) 17 minutes ago                       priceless_jackson
+e49f1d5e05fc        myhttpd:1.1         "/usr/sbin/apache2 -…"   18 minutes ago      Exited (1) 18 minutes ago                       wonderful_curie
+[root@ip-172-31-21-44 ~]# docker logs bff4b089754a
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.17.0.2. Set the 'ServerName' directive globally to suppress this message
+(21)Is a directory: AH00058: Error retrieving pid file /var/log/apache2
+AH00059: Remove it before continuing if it is corrupted.
+[root@ip-172-31-21-44 ~]# docker rmi -f $(docker images)
+Untagged: myhttpd:1.4
+Deleted: sha256:fe0012bad38ea959e4a91968aa015314ce7dde0b49a18f3056ec11f76b93de9f
+Deleted: sha256:32ca31b735a8d7d9fcbb8b4f350741d399c42cc8cc3be36be62a8ff48a5d7e64
+Deleted: sha256:61d2ad508dc63e248f6d0c2af2145681a88e96c164fc5a327ff840a669017711
+Deleted: sha256:cc6a89d4a1b3d5fa125baccda747a9ae87401be225a0ae65d7dec75e05ab02fe
+Untagged: myhttpd:1.3
+Deleted: sha256:3f81ec9347e7594a6abb24229d230f696934e72a44648e305ae42ac39c2e58de
+Deleted: sha256:30189fe9461dbd7b9b6e4208c034f1685e020550524ba60d4e6d2d31145c79db
+Deleted: sha256:412a3f210e9ff349b241d54915bf7987c1a32d711fd0dd51610cdfd96f90c38b
+Deleted: sha256:a0f271172d57cdba685662a6b5c349cbdd3a183c967bb56b124a3fe64cb82d69
+Untagged: myhttpd:1.2
+Deleted: sha256:68fa4721c5eced38b5ee45bea9ec34e5f4cf466b35a2340b55e207769b5b4960
+Deleted: sha256:d18f3eee43ffbb4090607ff05472311b9418874f5b396530b8f091ed249998e8
+Deleted: sha256:52c4c1795cb8067888aed67e1c50c582f3030a2d095a359a59b264d08072bcf5
+Untagged: myhttpd:1.1
+Deleted: sha256:897fdea3687411a4eeccd551b2a12ec2dd082ba2f1bc7c15443f88569043c398
+Untagged: myhttpd:1.0
+Deleted: sha256:4f97eeb154337db9af0a501ea602f53fe4e834b3ac62431fb7be3c2e397fe337
+Deleted: sha256:efd3fbc349b2fc316faddc8d3352fd392e0d551e4c66b279dc16de887c986cbc
+Deleted: sha256:52bb43c3fbd2486556b879320f2bae23201ba24c8709751faece8ed1b6f48132
+Deleted: sha256:534322ced465aefc37c5d3c062ed6247f767c36dbb48f1ff931efbeee4f807cf
+Untagged: prashanth121rp/mytomcatrepo:1.0
+Untagged: prashanth121rp/mytomcatrepo@sha256:a69fd8c0bfe3c2894f09c475665c5a686aa4e7ae5fe50f907b03d12cc79a5c15
+Deleted: sha256:e2fcf13bd51622f53ae9cf4dd9aa33edfba84e15c02990c19a0d1d2f7297d2e2
+Deleted: sha256:47c40f3975278f74667af319460bfb4a6c2d0a8fb7b809896f0b6a9ca172d9de
+Deleted: sha256:c031c64b7589c2d18ae044573c1dd6389fe24b462d0ed735a1f3947c9b2dcaed
+Deleted: sha256:fdd09b8d995f8c9b576687d4dac247743e7514ecf09600f1f6637ae0e5b9fafd
+Deleted: sha256:40540209bdd6f18bc2a4641b8d6c5e0af2508fb4a8fe778477c6afd3db0b561c
+Deleted: sha256:a26f9a6417af8b7c63941168436a95682dbfef57389473849c096cfab03d2541
+Deleted: sha256:02b6ac4c84e6f2d39ced370482979ad4e619ccc84bbfc4720e7bb0aa38422389
+Deleted: sha256:f840795f012be3f283e7d89e48eb2f7ac2af3aba78adc12f4c794c39ba847df6
+Deleted: sha256:30b509ccfa5f01a0f2f44c03547035a54e1a512c52199527e0da9e100f9536bf
+Deleted: sha256:d97b88c79dde0a2cdfe828c136bf134dcbc7c3cbde6f8bb852425bbad88de0c8
+Deleted: sha256:dae4f674403b331cb8c19b2c238ffa7d5a7249a1b4fafc4725054201dce3341a
+Deleted: sha256:a9a9c8853295275070975beba78ec0f573172e6e41b30232a00d8af0d49b8ef3
+Deleted: sha256:ddf0293e8e23246803d265b158ffbb9453d925fe392b43515984815853e9121b
+Deleted: sha256:f94641f1fe1f5c42c325652bf55f0513c881c86b620b912b15460e0bca07cc12
+Untagged: ubuntu:14.04
+Untagged: ubuntu@sha256:2f7c79927b346e436cc14c92bd4e5bd778c3bd7037f35bc639ac1589a7acfa90
+Deleted: sha256:2c5e00d77a67934d5e39493477f262b878f127b9c01b491f06d8f06f78819578
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: myhttpd
+Error: No such image: 1.4
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error response from daemon: conflict: unable to delete a0f271172d57 (cannot be forced) - image has dependent child images
+Error: No such image: minute
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: myhttpd
+Error: No such image: 1.3
+Error: No such image: 5
+Error: No such image: minutes
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: myhttpd
+Error: No such image: 1.2
+Error: No such image: 11
+Error: No such image: minutes
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: myhttpd
+Error: No such image: 1.1
+Error: No such image: 21
+Error: No such image: minutes
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: myhttpd
+Error: No such image: 1.0
+Error: No such image: 40
+Error: No such image: minutes
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: prashanth121rp/mytomcatrepo
+Error: No such image: 1.0
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: an
+Error: No such image: hour
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+Error: No such image: ubuntu
+Error: No such image: 14.04
+Error: No such image: 4
+Error: No such image: weeks
+Error: No such image: ago
+Error response from daemon: invalid reference format: repository name must be lowercase
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+[root@ip-172-31-21-44 ~]# docker build -t myhttpd:1.5 .
+Sending build context to Docker daemon  14.85kB
+Step 1/11 : FROM ubuntu:14.04
+14.04: Pulling from library/ubuntu
+a7344f52cb74: Already exists
+515c9bb51536: Already exists
+e1eabe0537eb: Already exists
+4701f1215c13: Already exists
+Digest: sha256:2f7c79927b346e436cc14c92bd4e5bd778c3bd7037f35bc639ac1589a7acfa90
+Status: Downloaded newer image for ubuntu:14.04
+ ---> 2c5e00d77a67
+Step 2/11 : MAINTAINER anuragsharma7212@gmail.com
+ ---> Running in 6a9b96128a99
+Removing intermediate container 6a9b96128a99
+ ---> 6e3297fba09c
+Step 3/11 : RUN apt update
+ ---> Running in f60eee89eabf
+
+WARNING: apt does not have a stable CLI interface yet. Use with caution in scripts.
+
+Ign http://archive.ubuntu.com trusty InRelease
+Get:1 http://security.ubuntu.com trusty-security InRelease [65.9 kB]
+Get:2 http://archive.ubuntu.com trusty-updates InRelease [65.9 kB]
+Get:3 http://security.ubuntu.com trusty-security/main amd64 Packages [1032 kB]
+Get:4 http://archive.ubuntu.com trusty-backports InRelease [65.9 kB]
+Get:5 http://archive.ubuntu.com trusty Release.gpg [933 B]
+Get:6 http://archive.ubuntu.com trusty-updates/main amd64 Packages [1460 kB]
+Get:7 http://security.ubuntu.com trusty-security/restricted amd64 Packages [18.1 kB]
+Get:8 http://security.ubuntu.com trusty-security/universe amd64 Packages [377 kB]
+Get:9 http://security.ubuntu.com trusty-security/multiverse amd64 Packages [4730 B]
+Get:10 http://archive.ubuntu.com trusty-updates/restricted amd64 Packages [21.4 kB]
+Get:11 http://archive.ubuntu.com trusty-updates/universe amd64 Packages [671 kB]
+Get:12 http://archive.ubuntu.com trusty-updates/multiverse amd64 Packages [16.1 kB]
+Get:13 http://archive.ubuntu.com trusty-backports/main amd64 Packages [14.7 kB]
+Get:14 http://archive.ubuntu.com trusty-backports/restricted amd64 Packages [40 B]
+Get:15 http://archive.ubuntu.com trusty-backports/universe amd64 Packages [52.5 kB]
+Get:16 http://archive.ubuntu.com trusty-backports/multiverse amd64 Packages [1392 B]
+Get:17 http://archive.ubuntu.com trusty Release [58.5 kB]
+Get:18 http://archive.ubuntu.com trusty/main amd64 Packages [1743 kB]
+Get:19 http://archive.ubuntu.com trusty/restricted amd64 Packages [16.0 kB]
+Get:20 http://archive.ubuntu.com trusty/universe amd64 Packages [7589 kB]
+Get:21 http://archive.ubuntu.com trusty/multiverse amd64 Packages [169 kB]
+Fetched 13.4 MB in 4s (3107 kB/s)
+Reading package lists...
+Removing intermediate container f60eee89eabf
+ ---> e9ceacca4a37
+Step 4/11 : RUN apt install apache2 -y
+ ---> Running in 172da4089a14
+
+WARNING: apt does not have a stable CLI interface yet. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following extra packages will be installed:
+  apache2-bin apache2-data libapr1 libaprutil1 libaprutil1-dbd-sqlite3
+  libaprutil1-ldap libasn1-8-heimdal libgssapi3-heimdal libhcrypto4-heimdal
+  libheimbase1-heimdal libheimntlm0-heimdal libhx509-5-heimdal
+  libkrb5-26-heimdal libldap-2.4-2 libroken18-heimdal libsasl2-2
+  libsasl2-modules libsasl2-modules-db libwind0-heimdal libxml2 openssl
+  sgml-base ssl-cert xml-core
+Suggested packages:
+  www-browser apache2-doc apache2-suexec-pristine apache2-suexec-custom ufw
+  apache2-utils libsasl2-modules-otp libsasl2-modules-ldap
+  libsasl2-modules-sql libsasl2-modules-gssapi-mit
+  libsasl2-modules-gssapi-heimdal ca-certificates sgml-base-doc
+  openssl-blacklist debhelper
+The following NEW packages will be installed:
+  apache2 apache2-bin apache2-data libapr1 libaprutil1 libaprutil1-dbd-sqlite3
+  libaprutil1-ldap libasn1-8-heimdal libgssapi3-heimdal libhcrypto4-heimdal
+  libheimbase1-heimdal libheimntlm0-heimdal libhx509-5-heimdal
+  libkrb5-26-heimdal libldap-2.4-2 libroken18-heimdal libsasl2-2
+  libsasl2-modules libsasl2-modules-db libwind0-heimdal libxml2 openssl
+  sgml-base ssl-cert xml-core
+0 upgraded, 25 newly installed, 0 to remove and 0 not upgraded.
+Need to get 3442 kB of archives.
+After this operation, 12.6 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libroken18-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [39.9 kB]
+Get:2 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libasn1-8-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [160 kB]
+Get:3 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libhcrypto4-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [84.1 kB]
+Get:4 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libheimbase1-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [29.0 kB]
+Get:5 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libwind0-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [47.9 kB]
+Get:6 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libhx509-5-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [104 kB]
+Get:7 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libkrb5-26-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [196 kB]
+Get:8 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libheimntlm0-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [15.2 kB]
+Get:9 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libgssapi3-heimdal amd64 1.6~git20131207+dfsg-1ubuntu1.2 [89.7 kB]
+Get:10 http://archive.ubuntu.com/ubuntu/ trusty/main libsasl2-modules-db amd64 2.1.25.dfsg1-17build1 [14.9 kB]
+Get:11 http://archive.ubuntu.com/ubuntu/ trusty/main libsasl2-2 amd64 2.1.25.dfsg1-17build1 [56.5 kB]
+Get:12 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libldap-2.4-2 amd64 2.4.31-1+nmu2ubuntu8.5 [1Progress: [  0%]
+Progress: [  2%]  ive.ubuntu.com/ubuntu/ trusty-updates/main libxml2 amd64 2.9.1+dfsg1-3ubuntu4.13 [573 kB]
+Progress: [  3%]  ive.ubuntu.com/ubuntu/ trusty/main sgml-base all 1.26+nmu4ubuntu1 [12.5 kB]
+Progress: [  4%]  ive.ubuntu.com/ubuntu/ trusty/main libapr1 amd64 1.5.0-1 [85.1 kB]
+Get:16 http://archive.ubuntu.com/ubuntu/ trusty/main libaprutil1 amd64 1.5.3-1 [76.4 kB]
+Progress: [  5%]  ive.ubuntu.com/ubuntu/ trusty/main libsasl2-modules amd64 2.1.25.dfsg1-17build1 [64.3 kBProgress: [  7%]
+Get:18 http://archive.ubuntu.com/ubuntu/ trusty-updates/main openssl amd64 1.0.1f-1ubuntu2.27 [489 kB]
+Progress: [  8%]  ive.ubuntu.com/ubuntu/ trusty/main xml-core all 0.13+nmu2 [23.3 kB]
+Progress: [  9%]  ive.ubuntu.com/ubuntu/ trusty/main libaprutil1-dbd-sqlite3 amd64 1.5.3-1 [10.5 kB]
+Get:21 http://archive.ubuntu.com/ubuntu/ trusty/main libaprutil1-ldap amd64 1.5.3-1 [8634 B]
+Progress: [ 10%]  ive.ubuntu.com/ubuntu/ trusty-updates/main apache2-bin amd64 2.4.7-1ubuntu4.22 [845 kB]
+Progress: [ 12%]  ive.ubuntu.com/ubuntu/ trusty-updates/main apache2-data all 2.4.7-1ubuntu4.22 [160 kB]
+Get:24 http://archive.ubuntu.com/ubuntu/ trusty-updates/main apache2 amd64 2.4.7-1ubuntu4.22 [87.4 kB]
+Get:25 http://archive.ubuntu.com/ubuntu/ trusty/main ssl-cert all 1.0.33 [16.6 kB]
+Progress: [ 14%]   initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+Progress: [ 15%]  ack to frontend: Readline
+Progress: [ 16%]   initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+Progress: [ 17%]  ack to frontend: Teletype
+Progress: [ 19%]   unable to re-open stdin:
+Fetched 3442 kB in 7s (464 kB/s)
+Progress: [ 20%]  ly unselected package libroken18-heimdal:amd64.
+Progress: [ 21%]  ... 11585 files and directories currently installed.)
+Preparing to unpack .../libroken18-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 22%]  18-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 24%]  ly unselected package libasn1-8-heimdal:amd64.
+Preparing to unpack .../libasn1-8-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Unpacking libasn1-8-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 26%]  ly unselected package libhcrypto4-heimdal:amd64.
+Preparing to unpack .../libhcrypto4-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 27%]  to4-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 28%]  ly unselected package libheimbase1-heimdal:amd64.
+Preparing to unpack .../libheimbase1-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 29%]  ase1-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 31%]  ly unselected package libwind0-heimdal:amd64.
+Preparing to unpack .../libwind0-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 32%]  -heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 33%]  ly unselected package libhx509-5-heimdal:amd64.
+Preparing to unpack .../libhx509-5-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 34%]  -5-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 36%]  ly unselected package libkrb5-26-heimdal:amd64.
+Preparing to unpack .../libkrb5-26-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Unpacking libkrb5-26-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 38%]  ly unselected package libheimntlm0-heimdal:amd64.
+Preparing to unpack .../libheimntlm0-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 39%]  tlm0-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 40%]  ly unselected package libgssapi3-heimdal:amd64.
+Preparing to unpack .../libgssapi3-heimdal_1.6~git20131207+dfsg-1ubuntu1.2_amd64.deb ...
+Progress: [ 41%]  i3-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Progress: [ 43%]  ly unselected package libsasl2-modules-db:amd64.
+Preparing to unpack .../libsasl2-modules-db_2.1.25.dfsg1-17build1_amd64.deb ...
+Progress: [ 44%]  -modules-db:amd64 (2.1.25.dfsg1-17build1) ...
+Progress: [ 45%]  ly unselected package libsasl2-2:amd64.
+Preparing to unpack .../libsasl2-2_2.1.25.dfsg1-17build1_amd64.deb ...
+Progress: [ 46%]  -2:amd64 (2.1.25.dfsg1-17build1) ...
+Progress: [ 48%]  ly unselected package libldap-2.4-2:amd64.
+Preparing to unpack .../libldap-2.4-2_2.4.31-1+nmu2ubuntu8.5_amd64.deb ...
+Unpacking libldap-2.4-2:amd64 (2.4.31-1+nmu2ubuntu8.5) ...
+Progress: [ 50%]  ly unselected package libxml2:amd64.
+Preparing to unpack .../libxml2_2.9.1+dfsg1-3ubuntu4.13_amd64.deb ...
+Progress: [ 51%]  amd64 (2.9.1+dfsg1-3ubuntu4.13) ...
+Progress: [ 52%]  ly unselected package sgml-base.
+Preparing to unpack .../sgml-base_1.26+nmu4ubuntu1_all.deb ...
+Progress: [ 53%]  e (1.26+nmu4ubuntu1) ...
+Progress: [ 55%]  ly unselected package libapr1:amd64.
+Preparing to unpack .../libapr1_1.5.0-1_amd64.deb ...
+Progress: [ 56%]  amd64 (1.5.0-1) ...
+Progress: [ 57%]  ly unselected package libaprutil1:amd64.
+Preparing to unpack .../libaprutil1_1.5.3-1_amd64.deb ...
+Progress: [ 58%]  il1:amd64 (1.5.3-1) ...
+Progress: [ 60%]  ly unselected package libsasl2-modules:amd64.
+Preparing to unpack .../libsasl2-modules_2.1.25.dfsg1-17build1_amd64.deb ...
+Progress: [ 61%]  -modules:amd64 (2.1.25.dfsg1-17build1) ...
+Progress: [ 63%]  ly unselected package openssl.
+Progress: [ 64%]  k .../openssl_1.0.1f-1ubuntu2.27_amd64.deb ...
+Progress: [ 66%]  (1.0.1f-1ubuntu2.27) ...
+Progress: [ 68%]  ly unselected package xml-core.
+Progress: [ 69%]  k .../xml-core_0.13+nmu2_all.deb ...
+Progress: [ 71%]   (0.13+nmu2) ...
+Progress: [ 72%]  ly unselected package libaprutil1-dbd-sqlite3:amd64.
+Progress: [ 74%]  k .../libaprutil1-dbd-sqlite3_1.5.3-1_amd64.deb ...
+Progress: [ 76%]  il1-dbd-sqlite3:amd64 (1.5.3-1) ...
+Progress: [ 77%]  ly unselected package libaprutil1-ldap:amd64.
+Progress: [ 79%]  k .../libaprutil1-ldap_1.5.3-1_amd64.deb ...
+Progress: [ 80%]  il1-ldap:amd64 (1.5.3-1) ...
+Progress: [ 82%]  ly unselected package apache2-bin.
+Progress: [ 84%]  k .../apache2-bin_2.4.7-1ubuntu4.22_amd64.deb ...
+Progress: [ 85%]  bin (2.4.7-1ubuntu4.22) ...
+Progress: [ 87%]  ly unselected package apache2-data.
+Progress: [ 88%]  k .../apache2-data_2.4.7-1ubuntu4.22_all.deb ...
+Progress: [ 89%]  data (2.4.7-1ubuntu4.22) ...
+Progress: [ 91%]  ly unselected package apache2.
+Progress: [ 92%]  k .../apache2_2.4.7-1ubuntu4.22_amd64.deb ...
+Progress: [ 94%]  (2.4.7-1ubuntu4.22) ...
+Progress: [ 96%]  ly unselected package ssl-cert.
+Preparing to unpack .../ssl-cert_1.0.33_all.deb ...
+Unpacking ssl-cert (1.0.33) ...
+Processing triggers for ureadahead (0.100.0-16) ...
+Setting up libroken18-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libasn1-8-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libhcrypto4-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libheimbase1-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libwind0-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libhx509-5-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libkrb5-26-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libheimntlm0-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libgssapi3-heimdal:amd64 (1.6~git20131207+dfsg-1ubuntu1.2) ...
+Setting up libsasl2-modules-db:amd64 (2.1.25.dfsg1-17build1) ...
+Setting up libsasl2-2:amd64 (2.1.25.dfsg1-17build1) ...
+Setting up libldap-2.4-2:amd64 (2.4.31-1+nmu2ubuntu8.5) ...
+Setting up libxml2:amd64 (2.9.1+dfsg1-3ubuntu4.13) ...
+Setting up sgml-base (1.26+nmu4ubuntu1) ...
+Setting up libapr1:amd64 (1.5.0-1) ...
+Setting up libaprutil1:amd64 (1.5.3-1) ...
+Setting up libsasl2-modules:amd64 (2.1.25.dfsg1-17build1) ...
+Setting up openssl (1.0.1f-1ubuntu2.27) ...
+Setting up xml-core (0.13+nmu2) ...
+Setting up libaprutil1-dbd-sqlite3:amd64 (1.5.3-1) ...
+Setting up libaprutil1-ldap:amd64 (1.5.3-1) ...
+Setting up apache2-bin (2.4.7-1ubuntu4.22) ...
+Setting up apache2-data (2.4.7-1ubuntu4.22) ...
+Progress: [ 97%]   (2.4.7-1ubuntu4.22) ...
+Enabling module mpm_event.
+Enabling module authz_core.
+Enabling module authz_host.
+Enabling module authn_core.
+Enabling module auth_basic.
+Progress: [ 98%]  cess_compat.
+Enabling module authn_file.
+Progress: [ 99%]  thz_user.
+Progress: [100%]  ias.
+Enabling module dir.
+Enabling module autoindex.
+Enabling module env.
+Enabling module mime.
+Enabling module negotiation.
+Enabling module setenvif.
+Enabling module filter.
+Enabling module deflate.
+Enabling module status.
+Enabling conf charset.
+Enabling conf localized-error-pages.
+Enabling conf other-vhosts-access-log.
+Enabling conf security.
+Enabling conf serve-cgi-bin.
+Enabling site 000-default.
+invoke-rc.d: policy-rc.d denied execution of start.
+Setting up ssl-cert (1.0.33) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+Processing triggers for libc-bin (2.19-0ubuntu6.15) ...
+Processing triggers for sgml-base (1.26+nmu4ubuntu1) ...
+Processing triggers for ureadahead (0.100.0-16) ...
+Removing intermediate container 172da4089a14
+ ---> d889c6188144
+Step 5/11 : ENV APACHE_LOG_DIR /var/log/apache2
+ ---> Running in bc88e676c032
+Removing intermediate container bc88e676c032
+ ---> 4b47c61bb335
+Step 6/11 : ENV APACHE_RUN_USER www-data
+ ---> Running in ea4ad34385f9
+Removing intermediate container ea4ad34385f9
+ ---> d4d5fce70f21
+Step 7/11 : ENV APACHE_RUN_GROUP www-data
+ ---> Running in 7dbc69949dd0
+Removing intermediate container 7dbc69949dd0
+ ---> c781f97e451f
+Step 8/11 : ENV APACHE_LOCK_DIR /var/log/apache2
+ ---> Running in c98a3791afc4
+Removing intermediate container c98a3791afc4
+ ---> f063fbd2a425
+Step 9/11 : ENV APACHE_PID_FILE /var/log/apache2
+ ---> Running in 59699b3df4c2
+Removing intermediate container 59699b3df4c2
+ ---> 451a029488a9
+Step 10/11 : EXPOSE 80
+ ---> Running in 57e10f51ddb2
+Removing intermediate container 57e10f51ddb2
+ ---> 04f28263d537
+Step 11/11 : CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
+ ---> Running in df2de582c6a5
+Removing intermediate container df2de582c6a5
+ ---> c4b33bf70df7
+Successfully built c4b33bf70df7
+Successfully tagged myhttpd:1.5
+[root@ip-172-31-21-44 ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+myhttpd             1.5                 c4b33bf70df7        7 seconds ago       216MB
+ubuntu              14.04               2c5e00d77a67        4 weeks ago         188MB
+[root@ip-172-31-21-44 ~]# docker run -dit -p 82:80 myhttpd:1.5
+05dccbdb5352c844ed97683654a737c06037f2f126820a7648f4949e429d6690
+[root@ip-172-31-21-44 ~]# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+[root@ip-172-31-21-44 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
+05dccbdb5352        myhttpd:1.5         "/usr/sbin/apache2 -…"   13 seconds ago      Exited (1) 12 seconds ago                       thirsty_wright
+bff4b089754a        fe0012bad38e        "/usr/sbin/apache2 -…"   2 minutes ago       Exited (1) 2 minutes ago                        musing_pasteur
+a25678c4d2a0        3f81ec9347e7        "/usr/sbin/apache2 -…"   6 minutes ago       Exited (1) 6 minutes ago                        happy_snyder
+e5b3eeebd6c8        68fa4721c5ec        "/usr/sbin/apache2 -…"   12 minutes ago      Exited (1) 12 minutes ago                       objective_banach
+cc2a340a57af        897fdea36874        "/usr/sbin/apache2 -…"   20 minutes ago      Exited (1) 20 minutes ago                       priceless_jackson
+e49f1d5e05fc        897fdea36874        "/usr/sbin/apache2 -…"   20 minutes ago      Exited (1) 20 minutes ago                       wonderful_curie
+[root@ip-172-31-21-44 ~]# docker logs 05dccbdb5352
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.17.0.2. Set the 'ServerName' directive globally to suppress this message
+(21)Is a directory: AH00058: Error retrieving pid file /var/log/apache2
+AH00059: Remove it before continuing if it is corrupted.
+[root@ip-172-31-21-44 ~]# vi Dockerfile
+[root@ip-172-31-21-44 ~]# history
+    1  yum install docker -y
+    2  service docker start
+    3  docker images
+    4  docker ps
+    5  docker ps -a
+    6  docker pull httpd
+    7  docker images
+    8  docker ps
+    9  docker ps -a
+   10  docker run httpd
+   11  docker ps
+   12  docker ps -a
+   13  docker run -d httpd
+   14  docker ps
+   15  docker ps -a
+   16  docker rm -f  1327d5fba073 4eccc1e350ee
+   17  docker ps
+   18  docker ps -a
+   19  docker run --name container1 -d httpd
+   20  docker ps
+   21  docker ps -a
+   22  docker rm -f container1
+   23  docker ps
+   24  docker ps -a
+   25  docker run --name container1 -d httpd
+   26  docker images
+   27  netstat -an | grep
+   28  netstat -an | grep 81
+   29  netstat -an | grep 22
+   30  docker run --name container2 -d -p 81:80 httpd
+   31  docker ps
+   32  netstat -an | grep 81
+   33  man netstat
+   34  docker ps
+   35  docker exec -it container2 /bin/bash
+   36  docker ps -a
+   37  docker rm -f container2 container1
+   38  docker ps
+   39  top
+   40  vi /tmp/index.html
+   41  docker run --name container1 -d -p 81:80 httpd
+   42  docker ps
+   43  docker cp /tmp/index.html container1:/usr/local.apache2/htdocs
+   44  docker cp /tmp/index.html container1:/usr/local/apache2/htdocs
+   45  docker rm -f $(docker ps -aq)
+   46  docker ps
+   47  docker ps -a
+   48  mkdir /my_dir
+   49  docker run -d -p 81:80 -v /my_dir:/usr/local/apache2/htdocs httpd
+   50  docker run -d -p 82:80 -v /my_dir:/usr/local/apache2/htdocs httpd
+   51  docker run -d -p 83:80 -v /my_dir:/usr/local/apache2/htdocs httpd
+   52  docker ps
+   53  cd my_dir
+   54  vi index.html
+   55  cd my_dir
+   56  vi index.html
+   57  cd /my_dir
+   58  vi index.html
+   59  history
+   60  cd ..
+   61  exit
+   62  docker images
+   63  docker ps
+   64  docker ps -a
+   65  docker rm -f $(docker ps -aq)
+   66  docker ps -a
+   67  $ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql
+   68  docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
+   69  docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql
+   70  docker ps
+   71  docker run -d -p 81:80 --link some-mysql wordpress
+   72  docker ps
+   73  top
+   74  mkdir /wordpress1
+   75  cd /wordpress1
+   76  vi docker-compose.yaml
+   77  docker-compose up
+   78  sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+   79  sudo chmod +x /usr/local/bin/docker-compose
+   80  sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+   81  docker-compose --version
+   82  docker-compose up
+   83  ls -lrt
+   84  vi docker-compose.yaml
+   85  docker-compose up
+   86  docker-compose -d up
+   87  docker-compose up -d
+   88  docker ps
+   89  history
+   90  docker run -dit -p 81:80 myhttpd:1.0
+   91  docker ps
+   92  docker exec -it 6b23b3ba8b85
+   93  docker exec -it 6b23b3ba8b85 /bin/bash
+   94  vi Dockerfile
+   95  docker ps
+   96  docker build -t myhttpd:1.1
+   97  docker build -t myhttpd:1.1 .
+   98  docker images
+   99  docker rm -f $(docker ps -aq)
+  100  docker ps
+  101  docker run -d -p 82:80 myhttpd:1.1
+  102  docker ps
+  103  docker run -dit -p 82:80 myhttpd:1.1
+  104  docker ps
+  105  docker ps -a
+  106  docker log cc2a340a57af
+  107  docker logs cc2a340a57af
+  108  more Dockerfile
+  109  vi Dockerfile
+  110  docker build -t myhttpd:1.2 .
+  111  docker run -dit -p 82:80 myhttpd:1.2
+  112  docker ps
+  113  docker ps -a
+  114  docker logs e5b3eeebd6c8
+  115  vi Dockerfile
+  116  docker run -dit -p 82:80 myhttpd:1.3
+  117  docker build -t myhttpd:1.3 .
+  118  docker run -dit -p 82:80 myhttpd:1.3
+  119  docker ps
+  120  docker ps -a
+  121  docker logs a25678c4d2a0
+  122  vi Dockerfile
+  123  docker build -t myhttpd:1.4 .
+  124  docker run -dit -p 82:80 myhttpd:1.4
+  125  docker ps
+  126  docker ps -a
+  127  docker logs bff4b089754a
+  128  docker rmi -f $(docker images)
+  129  docker images
+  130  docker build -t myhttpd:1.5 .
+  131  docker images
+  132  docker run -dit -p 82:80 myhttpd:1.5
+  133  docker ps
+  134  docker ps -a
+  135  docker logs 05dccbdb5352
+  136  vi Dockerfile
+  137  history
+[root@ip-172-31-21-44 ~]#
